@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Offline – Khidmaty</title>
+  <meta name="color-scheme" content="light dark" />
+
+  <!-- Cairo font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap&subset=arabic" rel="stylesheet" />
+
+  <style>
+    body {
+      font-family: "Cairo", system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans Arabic", "Noto Sans", Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      margin: 0; padding: 2rem; display: grid; min-height: 100vh; place-items: center;
+      background: #f8fafc; color: #0f172a;
+    }
+    .card { max-width: 460px; background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem 1.5rem; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+    h1 { margin: 0 0 .5rem; font-size: 1.25rem; }
+    p { margin: 0.25rem 0; color: #475569; }
+    a { color: #0ea5e9; text-decoration: underline; }
+    @media (prefers-color-scheme: dark) {
+      body { background: #0b1220; color: #e2e8f0; }
+      .card { background: #0f172a; border-color: #1f2937; }
+      p { color: #94a3b8; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>You're offline</h1>
+    <p>It looks like you don't have an internet connection.</p>
+    <p>Try reconnecting, or <a href="/">go back to the homepage</a>.</p>
+  </div>
+</body>
+</html>

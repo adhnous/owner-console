@@ -1,0 +1,148 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() { return request.auth != null; }
+    function userRole() {
+      return isSignedIn() ? get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role : null;
+    }
+    function isAdmin() { let r = userRole(); return r == 'admin' || r == 'owner'; }
+
+    // Allow public read access for services
+    match /services/{serviceId} {
+      function isProviderOwner() { return isSignedIn() && resource.data.providerId == request.auth.uid; }
+      // Ensure non-negative price on create/update (applies to provider actions)
+      function priceNonNegative() {
+        return request.resource.data.price is number && request.resource.data.price >= 0;
+      }
+      allow read: if resource.data.status == 'approved' || isProviderOwner() || isAdmin();
+      // Providers can create only their own services; default status should be 'pending'. Admins can create too.
+      function isPendingOnCreate() { return !(request.resource.data.status is string) || request.resource.data.status == 'pending'; }
+      allow create: if (
+        (isSignedIn() && userRole() == 'provider' && request.resource.data.providerId == request.auth.uid && isPendingOnCreate() && priceNonNegative())
+        || isAdmin()
+      );
+      // Providers can update only their own docs and cannot change status or providerId.
+      // Admins can update any field (including status).
+      allow update: if (
+        (isProviderOwner() && request.resource.data.providerId == resource.data.providerId && request.resource.data.status == resource.data.status && priceNonNegative())
+        || isAdmin()
+      );
+      // Deletion is admin-only; providers must submit a moderated deletion request
+      allow delete: if isAdmin();
+
+      // Reviews subcollection: one review per user (doc id = authorId)
+      match /reviews/{authorId} {
+        allow read: if true;
+        function isAuthor() { return isSignedIn() && request.auth.uid == authorId; }
+        function isNotOwner() {
+          // If the parent service doc doesn't exist (e.g., demo), treat as not owner
+          return !exists(/databases/$(database)/documents/services/$(serviceId))
+                 || get(/databases/$(database)/documents/services/$(serviceId)).data.providerId != request.auth.uid;
+        }
+        function ratingValid() {
+          // Firestore client numbers are often doubles; accept any number in [1,5]
+          return request.resource.data.rating is number
+                 && request.resource.data.rating >= 1
+                 && request.resource.data.rating <= 5;
+        }
+        function serviceIdValid() { return request.resource.data.serviceId == serviceId; }
+        function authorIdValid() { return request.resource.data.authorId == request.auth.uid; }
+        function textValid() { return request.resource.data.text is string && request.resource.data.text.size() <= 1000; }
+
+        allow create, update: if isAuthor() && isNotOwner() && ratingValid() && serviceIdValid() && authorIdValid() && textValid();
+        allow delete: if isAuthor();
+      }
+    }
+
+    // Users can create their own profile, and can only read/write their own data afterwards.
+    match /users/{userId} {
+      allow create: if request.auth != null && request.auth.uid == userId;
+      allow read, update, delete: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Aggregated daily stats: providers can read only their rows; no client writes
+    match /stats_daily/{docId} {
+      allow read: if (request.auth != null && resource.data.providerUid == request.auth.uid) || isAdmin();
+      allow write: if false;
+    }
+
+    // Public ads shown in the global moving strip
+    match /ads/{adId} {
+      // Anyone can read active ads; admins/owners can read all
+      allow read: if (resource.data.active == true) || isAdmin();
+      // Only admins/owners can create/update/delete ads
+      allow write: if isAdmin();
+    }
+
+    // Contact messages submitted via API (admin SDK). Client access only for admins/owners.
+    match /contact_messages/{msgId} {
+      allow read: if isAdmin();
+      allow update, delete: if isAdmin();
+      allow create: if false; // creation is server-only via Admin SDK
+    }
+
+    // Global app settings (e.g., feature flags)
+    match /settings/{docId} {
+      // Everyone can read settings to enable client-side gating
+      allow read: if true;
+      // Only admins/owners can create/update/delete settings
+      allow write: if isAdmin();
+    }
+
+    // Raw events are server-only
+    match /events/{id} {
+      allow read: if false;
+      allow write: if false;
+    }
+
+    // Providers can request additional service slots (fees apply)
+    match /service_slot_requests/{reqId} {
+      // Anyone signed in can read their own request; admins can read all
+      allow read: if (isSignedIn() && resource.data.uid == request.auth.uid) || isAdmin();
+      // Provider creates requests for themselves only
+      allow create: if isSignedIn() && request.resource.data.uid == request.auth.uid;
+      // Only admins/owners can update or delete
+      allow update, delete: if isAdmin();
+    }
+
+    // Providers can request service deletion; admins approve/reject
+    match /service_deletion_requests/{reqId} {
+      // Creator can read their own requests; admins can read all
+      allow read: if (isSignedIn() && resource.data.uid == request.auth.uid) || isAdmin();
+      // Provider creates deletion request for a service they own (validated server-side too)
+      allow create: if isSignedIn() && request.resource.data.uid == request.auth.uid;
+      // Only admins/owners can update or delete requests
+      allow update, delete: if isAdmin();
+    }
+
+    // Conversations and messages (in-app chat)
+    match /conversations/{conversationId} {
+      function convExists() { return exists(/databases/$(database)/documents/conversations/$(conversationId)); }
+      function convParticipants() {
+        return convExists() ? get(/databases/$(database)/documents/conversations/$(conversationId)).data.participants : {};
+      }
+      function isConvParticipant() { return isSignedIn() && (convParticipants()[request.auth.uid] == true); }
+      function isConvParticipantOnCreate() { return isSignedIn() && (request.resource.data.participants[request.auth.uid] == true); }
+
+      // Only participants (or admin) can read/update conversations. Anyone creating must include themselves in participants.
+      allow read: if isConvParticipant() || isAdmin();
+      allow create: if isConvParticipantOnCreate() || isAdmin();
+      allow update, delete: if isConvParticipant() || isAdmin();
+
+      match /messages/{messageId} {
+        function parentParticipants() { return convParticipants(); }
+        function inParent() { return isSignedIn() && (parentParticipants()[request.auth.uid] == true); }
+        function textOk() { return request.resource.data.text is string && request.resource.data.text.size() <= 2000; }
+
+        // Only participants can read messages
+        allow read: if inParent() || isAdmin();
+        // Only participants can send, and senderId must match auth
+        allow create: if inParent() && request.resource.data.senderId == request.auth.uid && textOk();
+        // No client updates/deletes of messages
+        allow update, delete: if false;
+      }
+    }
+  }
+
+}

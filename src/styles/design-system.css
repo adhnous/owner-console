@@ -1,0 +1,46 @@
+/* design-system (component utilities) */
+  .ds-container { @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8; }
+  .ds-page { @apply min-h-[100svh] bg-gradient-to-br from-secondary to-muted/40 py-8; }
+
+  .ds-card { @apply bg-card text-card-foreground border border-border rounded-xl shadow-sm; }
+  .ds-card-section { @apply p-6 md:p-8; }
+
+  .ds-title { @apply text-3xl md:text-4xl font-bold tracking-tight; }
+  .ds-subtitle { @apply text-muted-foreground text-base md:text-lg; }
+  .ds-section-title { @apply text-xl md:text-2xl font-semibold; }
+  .ds-section-subtitle { @apply text-sm text-muted-foreground; }
+
+  .ds-grid { @apply grid grid-cols-1 gap-6; }
+  .ds-grid-2 { @apply grid grid-cols-1 md:grid-cols-2 gap-6; }
+  .ds-grid-3 { @apply grid grid-cols-1 md:grid-cols-3 gap-6; }
+
+  .ds-toolbar { @apply flex items-center justify-between gap-3; }
+
+  .ds-btn { @apply inline-flex items-center justify-center whitespace-nowrap rounded-lg border font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2; }
+  .ds-btn-sm { @apply h-8 px-3 text-sm; }
+  .ds-btn-lg { @apply h-11 px-5 text-base; }
+  .ds-btn-primary { @apply bg-primary text-primary-foreground border-transparent hover:brightness-110; }
+  .ds-btn-outline { @apply bg-transparent border-border hover:bg-secondary; }
+  .ds-btn-ghost { @apply bg-transparent border-transparent hover:bg-secondary; }
+  .ds-btn-danger { @apply bg-destructive text-destructive-foreground border-transparent hover:brightness-110; }
+
+  .ds-input { @apply block w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50; }
+  .ds-textarea { @apply block w-full min-h-[120px] rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2; }
+  .ds-select { @apply block w-full h-10 rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring; }
+  .ds-label { @apply text-sm font-medium; }
+
+  .ds-badge { @apply inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-medium; }
+  .ds-badge-neutral { @apply bg-secondary text-foreground border-border; }
+  .ds-badge-success { @apply bg-green-100 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-200 dark:border-green-900; }
+  .ds-badge-warn { @apply bg-yellow-100 text-yellow-900 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-200 dark:border-yellow-900; }
+  .ds-badge-danger { @apply bg-red-100 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-200 dark:border-red-900; }
+
+  .ds-kv { @apply grid grid-cols-1 md:grid-cols-2 gap-3; }
+  .ds-kv .k { @apply text-xs uppercase tracking-wide text-muted-foreground; }
+  .ds-kv .v { @apply font-medium; }
+
+  .ds-hero { @apply relative overflow-hidden rounded-2xl bg-gradient-to-br from-copperDark to-copperLight text-ink; }
+  .ds-hero-content { @apply p-8 md:p-12; }
+
+  .ds-link { @apply underline underline-offset-4 text-primary hover:opacity-90; }
+ 

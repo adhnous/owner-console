@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CloudAI Academy - Professional AI & Cloud Learning</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- Cairo font (includes Arabic subset in case you add Arabic text later) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap&subset=arabic" rel="stylesheet" />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      /* Make Cairo the global font */
+      font-family: "Cairo", system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Arabic", Arial, "Helvetica Neue", Helvetica, sans-serif;
+    }
+
+    :root {
+      --primary: #2c3e50;
+      --secondary: #3498db;
+      --accent: #9b59b6;
+      --light: #ecf0f1;
+      --dark: #2c3e50;
+      --success: #2ecc71;
+      --gradient: linear-gradient(135deg, #3498db, #9b59b6);
+    }
+
+    body {
+      background-color: #f8f9fa;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Header Styles */
+    header {
+      background: var(--gradient);
+      color: white;
+      padding: 1rem 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    .logo i {
+      font-size: 2rem;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      padding: 5px 10px;
+      border-radius: 4px;
+    }
+
+    nav a:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .auth-buttons {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid white;
+      color: white;
+    }
+
+    .btn-primary {
+      background: white;
+      color: var(--secondary);
+    }
+
+    .btn-outline:hover {
+      background: white;
+      color: var(--secondary);
+    }
+
+    .btn-primary:hover {
+      background: var(--light);
+    }
+
+    /* Hero Section */
+    .hero {
+      background: var(--gradient);
+      color: white;
+      padding: 6rem 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="%23ffffff" opacity="0.1"><polygon points="1000,100 1000,0 0,100"></polygon></svg>');
+      background-size: cover;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+
+    /* Features Section */
+    .features {
+      padding: 5rem 0;
+      background: white;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-title h2 {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .section-title p {
+      color: #7f8c8d;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: 10px;
+      padding: 2rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-align: center;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .feature-icon {
+      width: 80px;
+      height: 80px;
+      background: var(--gradient);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      color: white;
+      font-size: 2rem;
+    }
+
+    .feature-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+
+    /* Courses Section */
+    .courses {
+      padding: 5rem 0;
+      background: #f8f9fa;
+    }
+
+    .courses-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .course-card {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease;
+    }
+
+    .course-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .course-image {
+      height: 200px;
+      background: var(--gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 3rem;
+    }
+
+    .course-content {
+      padding: 1.5rem;
+    }
+
+    .course-category {
+      display: inline-block;
+      background: var(--light);
+      color: var(--secondary);
+      padding: 5px 10px;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .course-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+
+    .course-meta {
+      display: flex;
+      justify-content: space-between;
+      color: #7f8c8d;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+    }
+
+    /* Stats Section */
+    .stats {
+      padding: 5rem 0;
+      background: var(--gradient);
+      color: white;
+      text-align: center;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+    }
+
+    .stat-item h3 {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Testimonials */
+    .testimonials {
+      padding: 5rem 0;
+      background: white;
+    }
+
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .testimonial-card {
+      background: #f8f9fa;
+      padding: 2rem;
+      border-radius: 10px;
+      position: relative;
+    }
+
+    .testimonial-card::before {
+      content: "\"";
+      font-size: 5rem;
+      color: var(--secondary);
+      opacity: 0.2;
+      position: absolute;
+      top: -10px;
+      left: 10px;
+    }
+
+    .testimonial-content {
+      margin-bottom: 1.5rem;
+      font-style: italic;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .author-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+    }
+
+    /* CTA Section */
+    .cta {
+      padding: 5rem 0;
+      background: var(--gradient);
+      color: white;
+      text-align: center;
+    }
+
+    .cta h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .cta p {
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      font-size: 1.1rem;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--primary);
+      color: white;
+      padding: 4rem 0 2rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .footer-column h3 {
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .footer-column h3::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background: var(--secondary);
+    }
+
+    .footer-column ul {
+      list-style: none;
+    }
+
+    .footer-column ul li {
+      margin-bottom: 10px;
+    }
+
+    .footer-column a {
+      color: #bdc3c7;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-column a:hover {
+      color: white;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .social-links a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+
+    .social-links a:hover {
+      background: var(--secondary);
+      transform: translateY(-5px);
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: #bdc3c7;
+      font-size: 0.9rem;
+    }
+
+    /* Mobile Menu */
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .header-content {
+        flex-wrap: wrap;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      nav {
+        width: 100%;
+        margin-top: 1rem;
+        display: none;
+      }
+
+      nav.active {
+        display: block;
+      }
+
+      nav ul {
+        flex-direction: column;
+        gap: 0;
+      }
+
+      nav ul li {
+        width: 100%;
+      }
+
+      nav a {
+        display: block;
+        padding: 10px 0;
+      }
+
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn {
+        width: 100%;
+        max-width: 250px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <i class="fas fa-cloud"></i>
+          <span>CloudAI Academy</span>
+        </div>
+
+        <button class="mobile-menu-btn">
+          <i class="fas fa-bars"></i>
+        </button>
+
+        <nav>
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Courses</a></li>
+            <li><a href="#">Learning Paths</a></li>
+            <li><a href="#">Pricing</a></li>
+            <li><a href="#">About</a></li>
+          </ul>
+        </nav>
+
+        <div class="auth-buttons">
+          <button class="btn btn-outline">Login</button>
+          <button class="btn btn-primary">Sign Up</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>Master Cloud Computing & Artificial Intelligence</h1>
+        <p>Join thousands of professionals advancing their careers with our industry-leading courses and hands-on projects in Cloud Technologies and AI.</p>
+        <div class="hero-buttons">
+          <button class="btn btn-primary">Explore Courses</button>
+          <button class="btn btn-outline">Free Trial</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <div class="container">
+      <div class="section-title">
+        <h2>Why Choose CloudAI Academy?</h2>
+        <p>We provide the most comprehensive learning experience for cloud and AI technologies</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-laptop-code"></i>
+          </div>
+          <h3>Hands-on Learning</h3>
+          <p>Gain practical experience with real-world projects and cloud environments.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-user-graduate"></i>
+          </div>
+          <h3>Expert Instructors</h3>
+          <p>Learn from industry professionals with years of experience in cloud and AI.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-certificate"></i>
+          </div>
+          <h3>Industry Certifications</h3>
+          <p>Prepare for AWS, Azure, Google Cloud, and other industry certifications.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Courses Section -->
+  <section class="courses">
+    <div class="container">
+      <div class="section-title">
+        <h2>Popular Courses</h2>
+        <p>Explore our most sought-after cloud and AI courses</p>
+      </div>
+
+      <div class="courses-grid">
+        <div class="course-card">
+          <div class="course-image">
+            <i class="fab fa-aws"></i>
+          </div>
+          <div class="course-content">
+            <span class="course-category">Cloud</span>
+            <h3>AWS Solutions Architect</h3>
+            <p>Master AWS services and prepare for the Solutions Architect certification.</p>
+            <div class="course-meta">
+              <span><i class="far fa-clock"></i> 8 weeks</span>
+              <span><i class="fas fa-signal"></i> Advanced</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card">
+          <div class="course-image">
+            <i class="fas fa-robot"></i>
+          </div>
+          <div class="course-content">
+            <span class="course-category">AI</span>
+            <h3>Machine Learning Engineering</h3>
+            <p>Build, deploy, and maintain production-ready ML systems.</p>
+            <div class="course-meta">
+              <span><i class="far fa-clock"></i> 10 weeks</span>
+              <span><i class="fas fa-signal"></i> Intermediate</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card">
+          <div class="course-image">
+            <i class="fab fa-microsoft"></i>
+          </div>
+          <div class="course-content">
+            <span class="course-category">Cloud</span>
+            <h3>Azure AI Engineer</h3>
+            <p>Learn to implement AI solutions on Microsoft Azure platform.</p>
+            <div class="course-meta">
+              <span><i class="far fa-clock"></i> 6 weeks</span>
+              <span><i class="fas fa-signal"></i> Intermediate</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <h3>10,000+</h3>
+          <p>Students Enrolled</p>
+        </div>
+
+        <div class="stat-item">
+          <h3>50+</h3>
+          <p>Expert Instructors</p>
+        </div>
+
+        <div class="stat-item">
+          <h3>200+</h3>
+          <p>Courses & Learning Paths</p>
+        </div>
+
+        <div class="stat-item">
+          <h3>95%</h3>
+          <p>Completion Rate</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="testimonials">
+    <div class="container">
+      <div class="section-title">
+        <h2>Student Success Stories</h2>
+        <p>Hear from our graduates who transformed their careers</p>
+      </div>
+
+      <div class="testimonial-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-content">
+            <p>"The AWS course at CloudAI Academy completely transformed my career. I went from a junior developer to a cloud architect in just 9 months!"</p>
+          </div>
+          <div class="testimonial-author">
+            <div class="author-avatar">JS</div>
+            <div>
+              <h4>Jessica Smith</h4>
+              <p>Cloud Architect at TechCorp</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="testimonial-content">
+            <p>"The hands-on projects and mentorship I received were invaluable. I landed my dream job as an ML engineer before even completing the course."</p>
+          </div>
+          <div class="testimonial-author">
+            <div class="author-avatar">MR</div>
+            <div>
+              <h4>Michael Rodriguez</h4>
+              <p>Machine Learning Engineer at DataAI</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <div class="testimonial-content">
+            <p>"The curriculum is perfectly aligned with industry needs. I was able to pass my Azure certification on the first attempt thanks to CloudAI Academy."</p>
+          </div>
+          <div class="testimonial-author">
+            <div class="author-avatar">SP</div>
+            <div>
+              <h4>Sarah Johnson</h4>
+              <p>Cloud Solutions Developer</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta">
+    <div class="container">
+      <h2>Start Your Cloud & AI Journey Today</h2>
+      <p>Join thousands of professionals who have accelerated their careers with CloudAI Academy</p>
+      <button class="btn btn-primary">Get Started Now</button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-column">
+          <h3>CloudAI Academy</h3>
+          <p>Your premier destination for Cloud Computing and Artificial Intelligence education.</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+            <a href="#"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-column">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Courses</a></li>
+            <li><a href="#">Pricing</a></li>
+            <li><a href="#">Blog</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h3>Categories</h3>
+          <ul>
+            <li><a href="#">Cloud Computing</a></li>
+            <li><a href="#">Artificial Intelligence</a></li>
+            <li><a href="#">Machine Learning</a></li>
+            <li><a href="#">Data Science</a></li>
+            <li><a href="#">DevOps</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h3>Contact Us</h3>
+          <ul>
+            <li><i class="fas fa-envelope"></i> info@cloudai.academy</li>
+            <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+            <li><i class="fas fa-map-marker-alt"></i> San Francisco, CA</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="copyright">
+        <p>&copy; 2023 CloudAI Academy. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    document.querySelector('.mobile-menu-btn').addEventListener('click', function () {
+      document.querySelector('nav').classList.toggle('active');
+    });
+
+    // Simple animation on scroll
+    window.addEventListener('scroll', function () {
+      const elements = document.querySelectorAll('.feature-card, .course-card, .testimonial-card');
+
+      elements.forEach(element => {
+        const position = element.getBoundingClientRect().top;
+        const screenPosition = window.innerHeight / 1.2;
+
+        if (position < screenPosition) {
+          element.style.opacity = '1';
+          element.style.transform = 'translateY(0)';
+        }
+      });
+    });
+
+    // Initialize elements for animation
+    document.querySelectorAll('.feature-card, .course-card, .testimonial-card').forEach(element => {
+      element.style.opacity = '0';
+      element.style.transform = 'translateY(20px)';
+      element.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    });
+
+    // Trigger initial animation
+    window.dispatchEvent(new Event('scroll'));
+  </script>
+</body>
+</html>

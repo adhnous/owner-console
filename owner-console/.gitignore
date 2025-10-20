@@ -1,0 +1,23 @@
+﻿node_modules/
+.env
+.env.*
+dist/
+build/
+.next/
+out/
+coverage/
+*.log
+.DS_Store
+.vscode/
+.vercel/
+.eslintcache
+
+# Ignore all ZIP and archive files
+*.zip
+*.tar
+*.gz
+*.rar
+*.7z
+
+# Specific file
+owner1.zip
